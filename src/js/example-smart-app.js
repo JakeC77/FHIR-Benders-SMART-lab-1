@@ -15,7 +15,7 @@
           type: 'Observation',
         });
 
-        $.when(pt,obv).done(function(patient) {
+        $.when(pt,obv).done(function(patient, observations) {
           var gender = patient.gender;
           var fname = '';
           var lname = '';
@@ -31,7 +31,7 @@
           p.gender = gender;
           p.fname = fname;
           p.lname = lname;
-          populatObservationTable(obv);
+          populatObservationTable(observations);
           ret.resolve(p);
         });
       } else {
