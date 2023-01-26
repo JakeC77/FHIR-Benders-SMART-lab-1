@@ -11,8 +11,11 @@
         var patient = smart.patient;
         var pt = patient.read();
       
+        var obv = smart.patient.api.fetchAll({
+          type: 'Observation',
+        });
 
-        $.when(pt).done(function(patient) {
+        $.when(pt,obv).done(function(patient) {
           var gender = patient.gender;
           var fname = '';
           var lname = '';
@@ -28,6 +31,7 @@
           p.gender = gender;
           p.fname = fname;
           p.lname = lname;
+          populatObservationTable(obv);
           ret.resolve(p);
         });
       } else {
@@ -39,6 +43,19 @@
     return ret.promise();
 
   };
+
+  function populatObservationTable(obs){
+    $('#obsTable').empty();
+    $('#obsTable').append("<tr><th>Text</th><th>Value</th><th>Unit</th>");
+
+    for(var i in obs){
+      var ob = obs[i]
+      if(ob.valueQuantity){
+        var row = "<tr><td>" + ob.code.text + "</td><td>" + ob.valueQuantity.value + "</td><td>" + ob.valueQuantity.unit + "</td></tr>";
+        $('#obsTable').append(row);
+      }
+    }
+  }
   
   function defaultPatient(){
     return {
